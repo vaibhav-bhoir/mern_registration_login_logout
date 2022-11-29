@@ -11,7 +11,7 @@ import bcrypt from 'bcryptjs';
 
 const { sign } = JsonWebToken;
 
-const signup = (req, res) => {
+export const signup = (req, res) => {
     const user = new User({
         username: req.body.username,
         email: req.body.email,
@@ -67,7 +67,7 @@ const signup = (req, res) => {
     });
 };
 
-const signin = (req, res) => {
+export const signin = (req, res) => {
     User.findOne({
         username: req.body.username,
     })
@@ -87,7 +87,7 @@ const signin = (req, res) => {
             if (!passwordIsValid) {
                 return res.status(401).send({
                     accessToken: null,
-                    message: 'Invalid Password!',
+                    message: 'Invalid Username or Password!',
                 });
             }
 
@@ -109,10 +109,3 @@ const signin = (req, res) => {
             });
         });
 };
-
-const controller = {
-    signin,
-    signup,
-};
-
-export default controller;

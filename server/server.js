@@ -2,7 +2,6 @@ import express, { json, urlencoded } from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
-// import db from './app/models/index.js';
 import Role from './app/models/role.model.js';
 import authRoutes from './app/routes/auth.routes.js';
 import userRoutes from './app/routes/user.routes.js';

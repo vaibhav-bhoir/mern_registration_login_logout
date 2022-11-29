@@ -72,6 +72,9 @@ const Login = () => {
                                 {loading && <span className="spinner-border spinner-border-sm"></span>}
                                 <span>Login</span>
                             </button>
+                            <p className="mt-4">
+                                No Account? <a href="/register">Register</a>
+                            </p>
                         </div>
                     </Form>
                 </Formik>

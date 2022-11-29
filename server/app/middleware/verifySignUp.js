@@ -2,7 +2,7 @@ import User from '../models/user.model.js';
 
 const ROLES = ['user', 'admin', 'moderator'];
 
-const checkDuplicateUsernameOrEmail = (req, res, next) => {
+export const checkDuplicateUsernameOrEmail = (req, res, next) => {
     // Username
     User.findOne({
         username: req.body.username,
@@ -36,7 +36,7 @@ const checkDuplicateUsernameOrEmail = (req, res, next) => {
     });
 };
 
-const checkRolesExisted = (req, res, next) => {
+export const checkRolesExisted = (req, res, next) => {
     if (req.body.roles) {
         for (let i = 0; i < req.body.roles.length; i++) {
             if (!ROLES.includes(req.body.roles[i])) {
@@ -50,10 +50,3 @@ const checkRolesExisted = (req, res, next) => {
 
     next();
 };
-
-const verifySignUp = {
-    checkDuplicateUsernameOrEmail,
-    checkRolesExisted,
-};
-
-export default verifySignUp;

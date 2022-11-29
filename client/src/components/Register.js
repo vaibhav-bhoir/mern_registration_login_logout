@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-
 import { register } from '../slices/auth';
 import { clearMessage } from '../slices/message';
 
@@ -83,8 +82,11 @@ const Register = () => {
 
                                 <div className="form-group">
                                     <button type="submit" className="btn btn-primary btn-block">
-                                        Sign Up
+                                        Register
                                     </button>
+                                    <p className="mt-4">
+                                        Have An Account? <a href="/login">Login</a>
+                                    </p>
                                 </div>
                             </div>
                         )}

@@ -3,7 +3,7 @@ import { secret } from '../config/auth.config.js';
 import User from '../models/user.model.js';
 import Role from '../models/role.model.js';
 
-const verifyToken = (req, res, next) => {
+export const verifyToken = (req, res, next) => {
     let token = req.headers['x-access-token'];
 
     if (!token) {
@@ -19,7 +19,7 @@ const verifyToken = (req, res, next) => {
     });
 };
 
-const isAdmin = (req, res, next) => {
+export const isAdmin = (req, res, next) => {
     User.findById(req.userId).exec((err, user) => {
         if (err) {
             res.status(500).send({ message: err });
@@ -50,7 +50,7 @@ const isAdmin = (req, res, next) => {
     });
 };
 
-const isModerator = (req, res, next) => {
+export const isModerator = (req, res, next) => {
     User.findById(req.userId).exec((err, user) => {
         if (err) {
             res.status(500).send({ message: err });
@@ -80,10 +80,3 @@ const isModerator = (req, res, next) => {
         );
     });
 };
-
-const authJwt = {
-    verifyToken,
-    isAdmin,
-    isModerator,
-};
-export default authJwt;
