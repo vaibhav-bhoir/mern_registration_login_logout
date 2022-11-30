@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import { secret } from '../config/auth.config.js';
 import User from '../models/user.model.js';
 import Role from '../models/role.model.js';
 
@@ -10,7 +9,7 @@ export const verifyToken = (req, res, next) => {
         return res.status(403).send({ message: 'No token provided!' });
     }
 
-    jwt.verify(token, secret, (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
             return res.status(401).send({ message: 'Unauthorized!' });
         }

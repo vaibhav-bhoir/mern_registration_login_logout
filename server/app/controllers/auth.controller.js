@@ -1,4 +1,3 @@
-import { secret } from '../config/auth.config.js';
 import User from '../models/user.model.js';
 import Role from '../models/role.model.js';
 import JsonWebToken from 'jsonwebtoken';
@@ -91,8 +90,8 @@ export const signin = (req, res) => {
                 });
             }
 
-            var token = sign({ id: user.id }, secret, {
-                expiresIn: 86400, // 24 hours
+            var token = sign({ id: user.id }, process.env.JWT_SECRET, {
+                expiresIn: process.env.JWT_EXPIRES_IN,
             });
 
             var authorities = [];
