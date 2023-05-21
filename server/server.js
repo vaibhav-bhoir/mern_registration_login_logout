@@ -1,6 +1,8 @@
 import express, { json, urlencoded } from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import path, { dirname } from 'path';
 import cors from 'cors';
 import Role from './app/models/role.model.js';
 import authRoutes from './app/routes/auth.routes.js';
@@ -9,8 +11,11 @@ import userRoutes from './app/routes/user.routes.js';
 const app = express();
 dotenv.config();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
 };
 
 app.use(cors(corsOptions));
@@ -47,9 +52,16 @@ app.use('/api/test', userRoutes);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3001;
+
 app.listen(PORT, () => {
     connect();
     console.log(`Server is running on port ${PORT}.`);
+});
+
+app.use(express.static(path.join(__dirname, '/client')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '/client/build', 'index.html'));
 });
 
 function initial() {
