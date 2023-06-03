@@ -4,12 +4,14 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { register } from '../slices/auth';
 import { clearMessage } from '../slices/message';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
     const [successful, setSuccessful] = useState(false);
 
     const { message } = useSelector((state) => state.message);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(clearMessage());
@@ -39,19 +41,19 @@ const Register = () => {
             .required('This field is required!'),
     });
 
-    const handleRegister = (formValue) => {
-        const { username, email, password } = formValue;
-
+    const handleRegister = async (formValues) => {
+        const { username, email, password } = formValues;
         setSuccessful(false);
-
-        dispatch(register({ username, email, password }))
-            .unwrap()
-            .then(() => {
-                setSuccessful(true);
-            })
-            .catch(() => {
-                setSuccessful(false);
-            });
+        try {
+            await dispatch(register({ username, email, password }));
+            setSuccessful(true);
+            // Redirect to login after 3 seconds
+            setTimeout(() => {
+                navigate('/login');
+            }, 3000);
+        } catch (error) {
+            setSuccessful(false);
+        }
     };
 
     return (
@@ -85,7 +87,7 @@ const Register = () => {
                                         Register
                                     </button>
                                     <p className="mt-4">
-                                        Have An Account? <a href="/login">Login</a>
+                                        Have An Account? <Link to="/login">Login</Link>
                                     </p>
                                 </div>
                             </div>

@@ -2,11 +2,6 @@ import User from '../models/user.model.js';
 import Role from '../models/role.model.js';
 import JsonWebToken from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-// signup: create new User in database (role is user if not specifying role)
-// signin: find username of the request in database, if it exists
-// compare password with password in database using bcrypt, if it is correct
-// generate a token using jsonwebtoken
-// return user information & access Token
 
 const { sign } = JsonWebToken;
 
@@ -59,7 +54,7 @@ export const signup = (req, res) => {
                         return;
                     }
 
-                    res.send({ message: 'User was registered successfully!' });
+                    res.send({ message: 'User was registered successfully! you will be redirect to login in 3s' });
                 });
             });
         }

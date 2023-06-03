@@ -1,9 +1,3 @@
-// There are 4 functions:
-// – /api/test/all for public access
-// – /api/test/user for loggedin users (any role)
-// – /api/test/mod for moderator users
-// – /api/test/admin for admin users
-
 export function allAccess(req, res) {
     res.status(200).send('Public Content.');
 }
