@@ -11,8 +11,14 @@ export const verifyToken = (req, res, next) => {
 
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
+            // Check Token expiry
+            // if (err.name === 'TokenExpiredError') {
+            //     return res.redirect('/login');
+            // }
+            // Token is invalid
             return res.status(401).send({ message: 'Unauthorized!' });
         }
+
         req.userId = decoded.id;
         next();
     });

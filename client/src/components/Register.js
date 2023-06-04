@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { register } from '../slices/auth';
 import { clearMessage } from '../slices/message';
 import { Link, useNavigate } from 'react-router-dom';
+import Loader from './Loader';
 
 const Register = () => {
     const [successful, setSuccessful] = useState(false);
@@ -12,6 +13,7 @@ const Register = () => {
     const { message } = useSelector((state) => state.message);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const loading = useSelector((state) => state.auth.loading);
 
     useEffect(() => {
         dispatch(clearMessage());
@@ -57,45 +59,98 @@ const Register = () => {
     };
 
     return (
-        <div className="col-md-12 signup-form">
-            <div className="card card-container">
-                <img src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="profile-img" className="profile-img-card" />
-                <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleRegister}>
-                    <Form>
-                        {!successful && (
-                            <div>
-                                <div className="form-group">
-                                    <label htmlFor="username">Username</label>
-                                    <Field name="username" type="text" className="form-control" />
-                                    <ErrorMessage name="username" component="div" className="alert alert-danger" />
+        <>
+            {loading && <Loader />}
+            {!successful && (
+                <div className="container px-0 py-5 mx-auto">
+                    <div className="card card0">
+                        <div className="d-flex flex-lg-row flex-column-reverse">
+                            <div className="card card1">
+                                <div className="row justify-content-center my-auto">
+                                    <div className="col-12 col-md-11 my-4">
+                                        <div className="row justify-content-center px-3 mb-3">
+                                            <img
+                                                className="logo"
+                                                src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                                                alt=""
+                                            />
+                                        </div>
+                                        <h3 className="mb-5 text-center heading">We are Developer</h3>
+                                        <h6 className="msg-info">Please login to your account</h6>
+                                        <Formik
+                                            initialValues={initialValues}
+                                            validationSchema={validationSchema}
+                                            onSubmit={handleRegister}
+                                        >
+                                            <Form>
+                                                <div className="form-group">
+                                                    <label htmlFor="username" className="form-control-label text-muted">
+                                                        Username
+                                                    </label>
+                                                    <Field
+                                                        name="username"
+                                                        type="text"
+                                                        className="form-control"
+                                                        placeholder="Username"
+                                                    />
+                                                    <ErrorMessage name="username" component="div" className="error" />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="email" className="form-control-label text-muted">
+                                                        Email
+                                                    </label>
+                                                    <Field
+                                                        name="email"
+                                                        type="email"
+                                                        className="form-control"
+                                                        placeholder="Enter your email id"
+                                                    />
+                                                    <ErrorMessage name="email" component="div" className="error" />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="password" className="form-control-label text-muted">
+                                                        Password
+                                                    </label>
+                                                    <Field
+                                                        name="password"
+                                                        type="password"
+                                                        className="form-control"
+                                                        placeholder="Enter your password"
+                                                    />
+                                                    <ErrorMessage name="password" component="div" className="error" />
+                                                </div>
+                                                <div className="row justify-content-center my-3 px-3">
+                                                    <button type="submit" className="btn-block btn-color">
+                                                        Register
+                                                    </button>
+                                                </div>
+                                            </Form>
+                                        </Formik>
+                                    </div>
                                 </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="email">Email</label>
-                                    <Field name="email" type="email" className="form-control" />
-                                    <ErrorMessage name="email" component="div" className="alert alert-danger" />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="password">Password</label>
-                                    <Field name="password" type="password" className="form-control" />
-                                    <ErrorMessage name="password" component="div" className="alert alert-danger" />
-                                </div>
-
-                                <div className="form-group">
-                                    <button type="submit" className="btn btn-primary btn-block">
-                                        Register
-                                    </button>
-                                    <p className="mt-4">
-                                        Have An Account? <Link to="/login">Login</Link>
+                                <div className="bottom text-center">
+                                    <p className="sm-text mx-auto mb-3">
+                                        Have an account?
+                                        <Link className="btn btn-white ml-2" to="/login">
+                                            Login
+                                        </Link>
                                     </p>
                                 </div>
                             </div>
-                        )}
-                    </Form>
-                </Formik>
-            </div>
-
+                            <div className="card card2">
+                                <div className="my-auto mx-md-5 px-md-5 right">
+                                    <h3 className="text-white">We are more than just a company</h3>
+                                    <small className="text-white">
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
             {message && (
                 <div className="form-group">
                     <div className={successful ? 'alert alert-success' : 'alert alert-danger'} role="alert">
@@ -103,7 +158,7 @@ const Register = () => {
                     </div>
                 </div>
             )}
-        </div>
+        </>
     );
 };
 

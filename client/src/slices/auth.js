@@ -8,6 +8,7 @@ export const register =
     ({ username, email, password }) =>
     async (dispatch) => {
         try {
+            dispatch(setLoading(true));
             const response = await AuthService.register(username, email, password);
             dispatch(setMessage(response.data.message));
             return response.data;
@@ -18,6 +19,8 @@ export const register =
                 error.toString();
             dispatch(setMessage(message));
             throw error;
+        } finally {
+            dispatch(setLoading(false));
         }
     };
 
@@ -25,6 +28,7 @@ export const login =
     ({ username, password }) =>
     async (dispatch) => {
         try {
+            dispatch(setLoading(true));
             const data = await AuthService.login(username, password);
             dispatch(setMessage(''));
             return { user: data };
@@ -35,6 +39,8 @@ export const login =
                 error.toString();
             dispatch(setMessage(message));
             throw error;
+        } finally {
+            dispatch(setLoading(false));
         }
     };
 
@@ -43,7 +49,11 @@ export const logout = () => async (dispatch) => {
     dispatch(setMessage(''));
 };
 
-const initialState = user ? { isLoggedIn: true, user } : { isLoggedIn: false, user: null };
+const initialState = {
+    isLoggedIn: user ? true : false,
+    user: user ? user : null,
+    loading: false,
+};
 
 const authSlice = createSlice({
     name: 'auth',
@@ -59,9 +69,12 @@ const authSlice = createSlice({
             state.isLoggedIn = false;
             state.user = null;
         },
+        setLoading: (state, action) => {
+            state.loading = action.payload;
+        },
     },
 });
 
-export const { setLoggedIn, setUser, clearUser } = authSlice.actions;
+export const { setLoggedIn, setUser, clearUser, setLoading } = authSlice.actions;
 
 export default authSlice.reducer;
