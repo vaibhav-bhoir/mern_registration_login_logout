@@ -44,6 +44,26 @@ export const login =
         }
     };
 
+export const forgotPassword =
+    ({ email }) =>
+    async (dispatch) => {
+        try {
+            dispatch(setLoading(true));
+            const data = await AuthService.forgotPassword(email);
+            dispatch(setMessage(''));
+            return { user: data };
+        } catch (error) {
+            const message =
+                (error.response && error.response.data && error.response.data.message) ||
+                error.message ||
+                error.toString();
+            dispatch(setMessage(message));
+            throw error;
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+
 export const logout = () => async (dispatch) => {
     await AuthService.logout();
     dispatch(setMessage(''));

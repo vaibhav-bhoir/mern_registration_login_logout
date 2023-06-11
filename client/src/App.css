@@ -82,14 +82,11 @@ button:focus {
 
 .card {
     background-color: #f7f7f7;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    border-radius: 0;
     border: none;
+}
+
+.card0 {
+    border-radius: 25px;
 }
 
 .card1 {
@@ -109,16 +106,16 @@ button:focus {
 }
 
 ::placeholder {
-    color: #000 !important;
+    color: #6c757d !important;
     opacity: 1;
 }
 
 :-ms-input-placeholder {
-    color: #000 !important;
+    color: #6c757d !important;
 }
 
 ::-ms-input-placeholder {
-    color: #000 !important;
+    color: #6c757d !important;
 }
 
 .form-control {
@@ -207,4 +204,13 @@ a:hover {
     .card2 {
         display: none;
     }
+}
+
+.table-wrapper {
+    overflow-y: auto;
+}
+
+.table-wrapper td:not(:first-child),
+.table-wrapper th:not(:first-child) {
+    min-width: 180px;
 }

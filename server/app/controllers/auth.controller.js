@@ -103,3 +103,34 @@ export const signin = (req, res) => {
             });
         });
 };
+
+export const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+    try {
+        const oldUser = await User.findOne({ email });
+
+        if (!oldUser) {
+            return res.status(404).send({ message: 'User Not Exists!!' });
+        }
+        const secret = process.env.JWT_SECRET + oldUser.password;
+        const token = sign({ email: oldUser.email, id: oldUser._id }, secret, {
+            expiresIn: '5m',
+        });
+        const link = `http://localhost:3000/reset-password/${oldUser._id}/${token}`;
+        console.log(link);
+        return res.status(201).send({ message: 'Success' });
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+export const resetPassword = async (req, res) => {
+    console.warn('🚀 ~ file: auth.controller.js:129 ~ resetPassword ~ req:', req);
+
+    const { id, token } = req.params;
+
+    console.log('ID:', id);
+    console.log('Token:', token);
+
+    // TODO
+};

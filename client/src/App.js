@@ -1,21 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-
 import Login from './components/Login';
 import Register from './components/Register';
+import ForgotPassword from './components/ForgotPassword';
 import Home from './components/Home';
 import Profile from './components/Profile';
 import BoardUser from './components/BoardUser';
 import BoardModerator from './components/BoardModerator';
 import BoardAdmin from './components/BoardAdmin';
-
+import ProtectedRoute from './ProtectedRoute';
 import { logout } from './slices/auth';
-
-import EventBus from './common/EventBus';
+import ResetPassword from './components/ResetPassword';
 
 const App = () => {
     const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -36,14 +34,6 @@ const App = () => {
             setShowModeratorBoard(false);
             setShowAdminBoard(false);
         }
-
-        EventBus.on('logout', () => {
-            logOut();
-        });
-
-        return () => {
-            EventBus.remove('logout');
-        };
     }, [currentUser, logOut]);
 
     return (
@@ -89,6 +79,12 @@ const App = () => {
                         <div className="navbar-nav ml-auto">
                             <li className="nav-item">
                                 <Link to={'/profile'} className="nav-link">
+                                    <img
+                                        className="logo"
+                                        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                                        alt=""
+                                        style={{ width: '25px', height: '25px', marginRight: '10px' }}
+                                    />
                                     {currentUser.username}
                                 </Link>
                             </li>
@@ -121,10 +117,41 @@ const App = () => {
                         <Route path="/home" element={<Home />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
-                        <Route path="/profile" element={<Profile />} />
-                        <Route path="/user" element={<BoardUser />} />
-                        <Route path="/mod" element={<BoardModerator />} />
-                        <Route path="/admin" element={<BoardAdmin />} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
+
+                        <Route
+                            path="/profile"
+                            element={
+                                <ProtectedRoute>
+                                    <Profile />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/user"
+                            element={
+                                <ProtectedRoute>
+                                    <BoardUser />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/mod"
+                            element={
+                                <ProtectedRoute>
+                                    <BoardModerator />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/admin"
+                            element={
+                                <ProtectedRoute>
+                                    <BoardAdmin />
+                                </ProtectedRoute>
+                            }
+                        />
                     </Routes>
                 </div>
             </div>

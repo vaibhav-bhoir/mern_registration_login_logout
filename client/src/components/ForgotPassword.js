@@ -1,15 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { clearUser, login } from '../slices/auth';
+import { clearUser, forgotPassword } from '../slices/auth';
 import { setMessage } from '../slices/message';
 import Loader from './Loader';
 import { toast } from 'react-toastify';
 
-const Login = () => {
-    const navigate = useNavigate();
+const ForgotPassword = () => {
     const { message } = useSelector((state) => state.message);
     const dispatch = useDispatch();
     const loading = useSelector((state) => state.auth.loading);
@@ -20,24 +18,19 @@ const Login = () => {
     }, [dispatch]);
 
     const initialValues = {
-        username: '',
-        password: '',
+        email: '',
     };
 
     const validationSchema = Yup.object().shape({
-        username: Yup.string().required('This field is required!'),
-        password: Yup.string().required('This field is required!'),
+        email: Yup.string().email('This is not a valid email.').required('This field is required!'),
     });
 
-    const handleLogin = async (formValues) => {
-        const { username, password } = formValues;
+    const handleSubmit = async (formValues, { resetForm }) => {
+        const { email } = formValues;
         try {
-            await dispatch(login({ username, password }));
-            toast('Login Successfull');
-            setTimeout(() => {
-                navigate('/profile');
-                window.location.reload();
-            }, 600);
+            await dispatch(forgotPassword({ email }));
+            toast('Reset Password link sent over email');
+            resetForm();
         } catch (error) {}
     };
 
@@ -50,44 +43,24 @@ const Login = () => {
                         <div className="card card1">
                             <div className="row justify-content-center my-auto">
                                 <div className="col-12 col-md-11 my-4">
-                                    <div className="row justify-content-center px-3 mb-3">
-                                        <img
-                                            className="logo"
-                                            src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-                                            alt=""
-                                        />
-                                    </div>
-                                    <h3 className="mb-5 text-center heading">We are Developer</h3>
-                                    <h6 className="msg-info">Please Login to your Account</h6>
+                                    <h3 className="mb-5 text-center heading">Forgot Password</h3>
                                     <Formik
                                         initialValues={initialValues}
                                         validationSchema={validationSchema}
-                                        onSubmit={handleLogin}
+                                        onSubmit={handleSubmit}
                                     >
                                         <Form>
                                             <div className="form-group">
-                                                <label htmlFor="username" className="form-control-label text-muted">
-                                                    Username
+                                                <label htmlFor="email" className="form-control-label text-muted">
+                                                    Email
                                                 </label>
                                                 <Field
-                                                    name="username"
-                                                    type="text"
+                                                    name="email"
+                                                    type="email"
                                                     className="form-control"
-                                                    placeholder="Enter your Username"
+                                                    placeholder="Enter your Email"
                                                 />
-                                                <ErrorMessage name="username" component="div" className="error" />
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="password" className="form-control-label text-muted">
-                                                    Password
-                                                </label>
-                                                <Field
-                                                    name="password"
-                                                    type="password"
-                                                    className="form-control"
-                                                    placeholder="Enter your Password"
-                                                />
-                                                <ErrorMessage name="password" component="div" className="error" />
+                                                <ErrorMessage name="email" component="div" className="error" />
                                             </div>
                                             <div className="row justify-content-center my-3 px-3">
                                                 <button
@@ -98,13 +71,8 @@ const Login = () => {
                                                     {loading && (
                                                         <span className="spinner-border spinner-border-sm"></span>
                                                     )}
-                                                    <span>Login</span>
+                                                    <span>Submit</span>
                                                 </button>
-                                            </div>
-                                            <div className="row justify-content-center my-2">
-                                                <Link to="/forgot-password">
-                                                    <small className="text-muted">Forgot Password?</small>
-                                                </Link>
                                             </div>
                                             {message && (
                                                 <div className="form-group">
@@ -116,14 +84,6 @@ const Login = () => {
                                         </Form>
                                     </Formik>
                                 </div>
-                            </div>
-                            <div className="bottom text-center">
-                                <p className="sm-text mx-auto mb-3">
-                                    Don't have an account?
-                                    <Link className="btn btn-white ml-2" to="/register">
-                                        Register
-                                    </Link>
-                                </p>
                             </div>
                         </div>
                         <div className="card card2">
@@ -143,4 +103,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default ForgotPassword;

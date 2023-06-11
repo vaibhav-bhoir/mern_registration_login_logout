@@ -6,6 +6,7 @@ import { register } from '../slices/auth';
 import { clearMessage } from '../slices/message';
 import { Link, useNavigate } from 'react-router-dom';
 import Loader from './Loader';
+import { toast } from 'react-toastify';
 
 const Register = () => {
     const [successful, setSuccessful] = useState(false);
@@ -48,6 +49,7 @@ const Register = () => {
         setSuccessful(false);
         try {
             await dispatch(register({ username, email, password }));
+            toast('You have been Registered Successfully');
             setSuccessful(true);
             // Redirect to login after 3 seconds
             setTimeout(() => {
@@ -76,7 +78,7 @@ const Register = () => {
                                             />
                                         </div>
                                         <h3 className="mb-5 text-center heading">We are Developer</h3>
-                                        <h6 className="msg-info">Please login to your account</h6>
+                                        <h6 className="msg-info">Please Create your Account</h6>
                                         <Formik
                                             initialValues={initialValues}
                                             validationSchema={validationSchema}
@@ -91,7 +93,7 @@ const Register = () => {
                                                         name="username"
                                                         type="text"
                                                         className="form-control"
-                                                        placeholder="Username"
+                                                        placeholder="Enter your Username"
                                                     />
                                                     <ErrorMessage name="username" component="div" className="error" />
                                                 </div>
@@ -103,7 +105,7 @@ const Register = () => {
                                                         name="email"
                                                         type="email"
                                                         className="form-control"
-                                                        placeholder="Enter your email id"
+                                                        placeholder="Enter your Email"
                                                     />
                                                     <ErrorMessage name="email" component="div" className="error" />
                                                 </div>
@@ -115,7 +117,7 @@ const Register = () => {
                                                         name="password"
                                                         type="password"
                                                         className="form-control"
-                                                        placeholder="Enter your password"
+                                                        placeholder="Enter your Password"
                                                     />
                                                     <ErrorMessage name="password" component="div" className="error" />
                                                 </div>
