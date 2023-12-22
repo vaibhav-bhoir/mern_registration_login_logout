@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
@@ -13,11 +13,16 @@ const Login = () => {
     const { message } = useSelector((state) => state.message);
     const dispatch = useDispatch();
     const loading = useSelector((state) => state.auth.loading);
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         dispatch(clearUser());
         dispatch(setMessage(''));
     }, [dispatch]);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     const initialValues = {
         username: '',
@@ -49,7 +54,7 @@ const Login = () => {
                     <div className="d-flex flex-lg-row flex-column-reverse">
                         <div className="card card1">
                             <div className="row justify-content-center my-auto">
-                                <div className="col-12 col-md-11 my-4">
+                                <div className="col-12 col-md-11">
                                     <div className="row justify-content-center px-3 mb-3">
                                         <img
                                             className="logo"
@@ -83,10 +88,17 @@ const Login = () => {
                                                 </label>
                                                 <Field
                                                     name="password"
-                                                    type="password"
+                                                    type={showPassword ? 'text' : 'password'}
                                                     className="form-control"
                                                     placeholder="Enter your Password"
                                                 />
+                                                <button
+                                                    type="button"
+                                                    className="btn toggle-passwor-btn"
+                                                    onClick={togglePasswordVisibility}
+                                                >
+                                                    {showPassword ? 'Hide' : 'Show'}
+                                                </button>
                                                 <ErrorMessage name="password" component="div" className="error" />
                                             </div>
                                             <div className="row justify-content-center my-3 px-3">
@@ -118,7 +130,7 @@ const Login = () => {
                                 </div>
                             </div>
                             <div className="bottom text-center">
-                                <p className="sm-text mx-auto mb-3">
+                                <p className="sm-text mx-auto my-0">
                                     Don't have an account?
                                     <Link className="btn btn-white ml-2" to="/register">
                                         Register

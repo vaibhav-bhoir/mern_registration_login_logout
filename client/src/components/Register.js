@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 
 const Register = () => {
     const [successful, setSuccessful] = useState(false);
-
+    const [showPassword, setShowPassword] = useState(false);
     const { message } = useSelector((state) => state.message);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -19,6 +19,10 @@ const Register = () => {
     useEffect(() => {
         dispatch(clearMessage());
     }, [dispatch]);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     const initialValues = {
         username: '',
@@ -39,7 +43,11 @@ const Register = () => {
             .test(
                 'len',
                 'The password must be between 6 and 40 characters.',
-                (val) => val && val.toString().length >= 6 && val.toString().length <= 40
+                (val) => val && val.toString().length >= 8 && val.toString().length <= 20
+            )
+            .matches(
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+                'Password must include combination of lowercase letter, uppercase letter, number, and special character.'
             )
             .required('This field is required!'),
     });
@@ -69,7 +77,7 @@ const Register = () => {
                         <div className="d-flex flex-lg-row flex-column-reverse">
                             <div className="card card1">
                                 <div className="row justify-content-center my-auto">
-                                    <div className="col-12 col-md-11 my-4">
+                                    <div className="col-12 col-md-11">
                                         <div className="row justify-content-center px-3 mb-3">
                                             <img
                                                 className="logo"
@@ -115,10 +123,17 @@ const Register = () => {
                                                     </label>
                                                     <Field
                                                         name="password"
-                                                        type="password"
+                                                        type={showPassword ? 'text' : 'password'}
                                                         className="form-control"
                                                         placeholder="Enter your Password"
                                                     />
+                                                    <button
+                                                        type="button"
+                                                        className="btn toggle-passwor-btn"
+                                                        onClick={togglePasswordVisibility}
+                                                    >
+                                                        {showPassword ? 'Hide' : 'Show'}
+                                                    </button>
                                                     <ErrorMessage name="password" component="div" className="error" />
                                                 </div>
                                                 <div className="row justify-content-center my-3 px-3">
@@ -131,7 +146,7 @@ const Register = () => {
                                     </div>
                                 </div>
                                 <div className="bottom text-center">
-                                    <p className="sm-text mx-auto mb-3">
+                                    <p className="sm-text mx-auto my-0">
                                         Have an account?
                                         <Link className="btn btn-white ml-2" to="/login">
                                             Login
